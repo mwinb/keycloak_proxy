@@ -13,7 +13,7 @@
     keycloak
       .init({ onLoad: "login-required" })
       .then(async () => {
-        fetch("/setToken", {
+        fetch("!{ setTokenUrl }", {
           method: "POST", // *GET, POST, PUT, DELETE, etc.
           headers: {
             Authorization: `Bearer ${keycloak.token}`,

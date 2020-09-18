@@ -16,17 +16,43 @@ Create docker compose file with both keycloak (which ingests your realm and clie
 
 Use the `/login` url to initialize a user session with keycloak. This url will redirect you back to your front end application after successful authentication. Set your log out functionality in your front end to link to the auth logout url as env variable that can be changed in production to match your service mesh logout url.
 
-## Application Urls.
+## Web Sockets.
 
-`POST /setToken`  
-`GET /login`  
-`GET /logout`  
-`GET /`  
- Adjust as neccessary to prevent conflicts with backend endpoints.
+Websockets have not yet been tested. The boiler plate for upgrading sockets is within the app. Users may want to add specific endpoints for your sockets. Sockets may default to xhr polling if using socket io and the connection is not upgraded. If sockets work please let me know, otherwise it is on the todo list.
+
+## Default Application Urls.
+
+Can be changed in ENV Variables.
+
+### Home
+
+`GET /`
+
+### Login
+
+`GET /login`
+
+### Logout
+
+`GET /logout`
+
+### Set Token
+
+`POST /setToken`
+
+Adjust as neccessary to prevent conflicts with backend endpoints.
 
 ## Env Variables
 
-These will be set in your docker file.
+These will be set in your docker file. Or .env for local execution.
+
+### HOME_URL
+
+### LOGIN_URL
+
+### LOGOUT_URL
+
+### SET_TOKEN_URL
 
 ### APP_AUTH_SERVER_URL
 
