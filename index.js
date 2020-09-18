@@ -55,7 +55,7 @@ app.get(logoutUrl, (_req, res) => {
     console.log("No token to Remove.");
   }
   const valueMap = {
-    newUrl: `http://localhost:${runningPort}/login`,
+    newUrl: `http://localhost:${runningPort}${loginUrl}`,
     realm: `${process.env.APP_REALM}`,
     authUrl: `${process.env.APP_AUTH_SERVER_URL}`,
   };
