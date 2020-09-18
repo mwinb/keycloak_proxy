@@ -1,0 +1,30 @@
+<head>
+  <body>
+    <p></p>
+  </body>
+  <script type="text/javascript" src="/keycloakJs/keycloak.js"></script>
+  <script>
+    const options = {
+      url: !{ url },
+      realm: !{ realm },
+      clientId: !{ clientId },
+    };
+    var keycloak = new Keycloak(options);
+    keycloak
+      .init({ onLoad: "login-required" })
+      .then(async () => {
+        fetch("/setToken", {
+          method: "POST", // *GET, POST, PUT, DELETE, etc.
+          headers: {
+            Authorization: `Bearer ${keycloak.token}`,
+          },
+        }).then(() => {
+          window.location = !{ newUrl };
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("Failed to login");
+      });
+  </script>
+</head>

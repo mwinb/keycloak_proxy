@@ -1,0 +1,19 @@
+{
+  "name": "keycloak_proxy",
+  "version": "1.0.0",
+  "description": "Http Proxy designed to forward a token to simulate an istio mesh with keycloak side car. ",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "http-proxy": "^1.18.1",
+    "keycloak": "^1.2.0"
+  },
+  "author": "Michael Winberry",
+  "license": "MIT"
+}
