@@ -19,6 +19,10 @@ const setTokenUrl = `${process.env.SET_TOKEN_URL}`;
 
 let token = undefined;
 
+app.get("/keycloakJs/keycloak.js", (_req, res) => {
+  res.sendFile(__dirname + "/keycloakJs/keycloak.js");
+});
+
 app.get(homeUrl, (_req, res) => {
   const valueMap = {
     runningPort: runningPort,
@@ -28,7 +32,7 @@ app.get(homeUrl, (_req, res) => {
     loginUrl: loginUrl,
     logoutUrl: logoutUrl,
   };
-  res.send(replaceValuesInHtml(valueMap, "/home.html"));
+  res.send(replaceValuesInHtml(valueMap, "/html/home.html"));
 });
 
 app.post(setTokenUrl, (req, res) => {
@@ -38,10 +42,6 @@ app.post(setTokenUrl, (req, res) => {
   } catch {
     res.sendStatus(400);
   }
-});
-
-app.get("/keycloakJs/keycloak.js", (_req, res) => {
-  res.sendFile(__dirname + "/keycloakJs/keycloak.js");
 });
 
 app.get(loginUrl, (_req, res) => {
@@ -60,14 +60,13 @@ app.get(logoutUrl, (_req, res) => {
     authUrl: `${process.env.APP_AUTH_SERVER_URL}`,
   };
 
-  const html = replaceValuesInHtml(valueMap, "/logout.html");
+  const html = replaceValuesInHtml(valueMap, "/html/logout.html");
   res.send(html);
 });
 
 app.all("/*", (req, res) => {
   if (token) {
-    req.headers.authorization = `Bearer ${token}`;
-    apiProxy.web(req, res, { target: backEndUrl });
+    forwardRequest(req, res);
   } else {
     console.log("Not Logged In");
   }
@@ -79,6 +78,11 @@ app.on("upgrade", (req, socket, head) => {
 
 server.listen(runningPort);
 
+function forwardRequest(req, res) {
+  req.headers.authorization = `Bearer ${token}`;
+  apiProxy.web(req, res, { target: backEndUrl });
+}
+
 function getLoginPage() {
   const valueMap = {
     url: `"${process.env.APP_AUTH_SERVER_URL}"`,
@@ -88,7 +92,7 @@ function getLoginPage() {
     setTokenUrl: setTokenUrl,
   };
 
-  const html = replaceValuesInHtml(valueMap, "/login.html");
+  const html = replaceValuesInHtml(valueMap, "/html/login.html");
   return html;
 }
 
