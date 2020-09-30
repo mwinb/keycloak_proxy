@@ -72,9 +72,9 @@ app.all("/*", (req, res) => {
   }
 });
 
-app.on("upgrade", (req, socket, head) => {
-  apiProxy.ws(req, socket, head);
-});
+// app.on("upgrade", (req, socket, head) => {
+//   apiProxy.ws(req, socket, head);
+// });
 
 server.listen(runningPort);
 
