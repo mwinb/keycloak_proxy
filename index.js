@@ -2,6 +2,8 @@ require("dotenv").config();
 const httpProxy = require("http-proxy");
 const http = require("http");
 const bodyParser = require("body-parser");
+const { static } = require("express");
+const path = require("path");
 const app = require("express")();
 const fs = require("fs");
 const apiProxy = httpProxy.createProxyServer({ ws: true });
@@ -19,9 +21,7 @@ const setTokenUrl = `${process.env.SET_TOKEN_URL}`;
 
 let token = undefined;
 
-app.get("/keycloakJs/keycloak.js", (_req, res) => {
-  res.sendFile(__dirname + "/keycloakJs/keycloak.js");
-});
+app.use(static(path.join(__dirname, "public")));
 
 app.get(homeUrl, (_req, res) => {
   const valueMap = {
@@ -32,7 +32,7 @@ app.get(homeUrl, (_req, res) => {
     loginUrl: loginUrl,
     logoutUrl: logoutUrl,
   };
-  res.send(replaceValuesInHtml(valueMap, "/html/home.html"));
+  res.send(replaceValuesInHtml(valueMap, "home.html"));
 });
 
 app.post(setTokenUrl, (req, res) => {
@@ -60,7 +60,7 @@ app.get(logoutUrl, (_req, res) => {
     authUrl: `${process.env.APP_AUTH_SERVER_URL}`,
   };
 
-  const html = replaceValuesInHtml(valueMap, "/html/logout.html");
+  const html = replaceValuesInHtml(valueMap, "logout.html");
   res.send(html);
 });
 
@@ -92,12 +92,15 @@ function getLoginPage() {
     setTokenUrl: setTokenUrl,
   };
 
-  const html = replaceValuesInHtml(valueMap, "/html/login.html");
+  const html = replaceValuesInHtml(valueMap, "login.html");
   return html;
 }
 
 function replaceValuesInHtml(valueMap, htmlPath) {
-  let fileAsString = fs.readFileSync(__dirname + `${htmlPath}`, "utf8");
+  let fileAsString = fs.readFileSync(
+    path.join(__dirname, "public", `${htmlPath}`),
+    "utf8"
+  );
   for (let key in valueMap) {
     fileAsString = fileAsString.split(`!{ ${key} }`).join(valueMap[key]);
   }
