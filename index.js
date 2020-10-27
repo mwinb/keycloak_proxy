@@ -6,9 +6,9 @@ const { static } = require("express");
 const path = require("path");
 const app = require("express")();
 const fs = require("fs");
-const apiProxy = httpProxy.createProxyServer({ ws: true });
+const apiProxy = httpProxy.createProxyServer();
 const server = http.createServer(app);
-
+app.use(static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const runningPort = 8000;
@@ -65,22 +65,24 @@ app.get(logoutUrl, (_req, res) => {
 });
 
 app.all("/*", (req, res) => {
-  if (token) {
-    forwardRequest(req, res);
-  } else {
-    console.log("Not Logged In");
+  try {
+    if (token) {
+      forwardRequest(req, res);
+    } else {
+      console.log("Not Logged In");
+    }
+  } catch {
+    console.log('Unable to forward request. Check connection and try again.')
   }
 });
-
-// app.on("upgrade", (req, socket, head) => {
-//   apiProxy.ws(req, socket, head);
-// });
 
 server.listen(runningPort);
 
 function forwardRequest(req, res) {
   req.headers.authorization = `Bearer ${token}`;
-  apiProxy.web(req, res, { target: backEndUrl });
+  apiProxy.web(req, res, { target: backEndUrl }, (e) => {
+    console.log(e)
+  });
 }
 
 function getLoginPage() {
