@@ -38,7 +38,7 @@ Can be changed in ENV Variables.
 
 ### Set Token
 
-`POST proxy/setToken`
+`POST /setToken`
 
 Adjust as neccessary to prevent conflicts with backend endpoints.
 
