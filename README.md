@@ -26,19 +26,19 @@ Can be changed in ENV Variables.
 
 ### Home
 
-`GET /`
+`GET proxy/home`
 
 ### Login
 
-`GET /login`
+`GET proxy/login`
 
 ### Logout
 
-`GET /logout`
+`GET proxy/logout`
 
 ### Set Token
 
-`POST /setToken`
+`POST proxy/setToken`
 
 Adjust as neccessary to prevent conflicts with backend endpoints.
 
